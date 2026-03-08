@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { devtools } from '@tanstack/devtools-vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import type { RollupLog } from 'rollup'
+import netlify from '@netlify/vite-plugin-tanstack-start'
 
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 
@@ -23,9 +24,10 @@ function shouldIgnoreTanStackBuildWarning(
 ) {
   const matchesExporter =
     warning.exporter && ignoredTanStackExporters.has(warning.exporter)
-  const matchesTanStackPackage =
-    warning.id?.includes('node_modules/@tanstack/start-') ||
-    warning.message?.includes('node_modules/@tanstack/start-')
+  const matchesTanStackPackage = [warning.id, warning.message].some(
+    (value) =>
+      typeof value === 'string' && value.includes('node_modules/@tanstack/start-'),
+  )
 
   return (
     warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
@@ -64,6 +66,7 @@ const config = defineConfig({
     tsconfigPaths({ projects: ['./tsconfig.json'] }),
     tailwindcss(),
     tanstackStart(),
+    netlify(),
     viteReact(),
   ],
 })
