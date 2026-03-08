@@ -33,8 +33,8 @@ function RawThoughtsArticle() {
 }
 
 export const rawThoughtsPost: BlogPost = {
-  slug: 'raw-thoughts',
-  title: '* [RAW THOUGHTS]',
+  slug: 'futures-worth-playing-for-raw',
+  title: 'Futures Worth Playing For * [RAW THOUGHTS]',
   summary:
     'Unfiltered notes on AI, curation, play, automation, crypto, events, language learning, and building futures worth living in.',
   teaser:
