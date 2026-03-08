@@ -43,7 +43,7 @@ function BlogArticleRoute() {
           </p>
           <Link
             to="/blog"
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-[var(--signal-line)] bg-[rgba(255,255,255,0.55)] px-5 py-3 text-sm font-semibold text-[var(--signal-ink)] no-underline transition hover:-translate-y-0.5 dark:bg-[rgba(13,22,29,0.62)]"
+            className="signal-action signal-action--secondary mt-6"
           >
             <ArrowLeft size={16} />
             Return to the journal

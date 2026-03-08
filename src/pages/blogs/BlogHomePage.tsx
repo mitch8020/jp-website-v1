@@ -31,14 +31,14 @@ export default function BlogHomePage() {
               <Link
                 to="/blog/$slug"
                 params={{ slug: featuredBlogPost.slug }}
-                className="inline-flex items-center gap-2 rounded-full bg-[linear-gradient(135deg,var(--signal-orange),#ffb151)] px-5 py-3 text-sm font-semibold text-[#27140a] no-underline shadow-[0_20px_40px_rgba(255,138,56,0.22)] transition hover:-translate-y-0.5"
+                className="signal-action signal-action--primary"
               >
                 Read the first essay
                 <ArrowRight size={16} />
               </Link>
               <a
                 href="#current-orbit"
-                className="inline-flex items-center gap-2 rounded-full border border-[var(--signal-line)] bg-[rgba(255,255,255,0.55)] px-5 py-3 text-sm font-semibold text-[var(--signal-ink)] no-underline transition hover:-translate-y-0.5 dark:bg-[rgba(13,22,29,0.62)]"
+                className="signal-action signal-action--secondary"
               >
                 Explore the archive
               </a>
@@ -122,10 +122,7 @@ export default function BlogHomePage() {
 
           <div className="mt-6 flex flex-wrap gap-2.5">
             {featuredBlogPost.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-[var(--signal-line)] bg-[rgba(255,255,255,0.58)] px-3 py-1.5 text-xs font-semibold tracking-[0.12em] text-[var(--signal-ink-soft)] uppercase dark:bg-[rgba(13,22,29,0.68)]"
-              >
+              <span key={tag} className="signal-tag-pill">
                 {tag}
               </span>
             ))}
@@ -145,7 +142,7 @@ export default function BlogHomePage() {
           <Link
             to="/blog/$slug"
             params={{ slug: featuredBlogPost.slug }}
-            className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-[var(--signal-ink)] no-underline transition group-hover:translate-x-1"
+            className="signal-action signal-action--secondary mt-8"
           >
             Open article
             <ArrowRight size={16} />

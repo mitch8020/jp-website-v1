@@ -17,10 +17,7 @@ export default function BlogArticleLayout({
       <section className="blog-stage rise-in overflow-hidden rounded-[2.4rem] px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
         <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div className="relative z-10">
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 rounded-full border border-[var(--signal-line)] bg-[rgba(255,255,255,0.52)] px-4 py-2 text-sm font-semibold text-[var(--signal-ink)] no-underline shadow-[0_16px_32px_rgba(17,32,46,0.08)] transition hover:-translate-y-0.5 dark:bg-[rgba(13,22,29,0.6)]"
-            >
+            <Link to="/blog" className="signal-action signal-action--secondary">
               <ArrowLeft size={16} />
               Back to the journal
             </Link>
@@ -45,10 +42,7 @@ export default function BlogArticleLayout({
 
             <div className="mt-7 flex flex-wrap gap-2.5">
               {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-[var(--signal-line)] bg-[rgba(255,255,255,0.58)] px-3 py-1.5 text-xs font-semibold tracking-[0.12em] text-[var(--signal-ink-soft)] uppercase dark:bg-[rgba(13,22,29,0.68)]"
-                >
+                <span key={tag} className="signal-tag-pill">
                   {tag}
                 </span>
               ))}
@@ -113,9 +107,9 @@ export default function BlogArticleLayout({
               conclusions stacked until a larger future becomes visible.
             </p>
 
-            <div className="mt-5 rounded-[1.4rem] border border-[var(--signal-line)] bg-[rgba(255,255,255,0.46)] p-4 dark:bg-[rgba(10,18,24,0.58)]">
-              <p className="signal-label mb-2">Key cue</p>
-              <p className="m-0 text-base leading-7 text-[var(--signal-ink)]">
+            <div className="signal-key-cue mt-5">
+              <p className="signal-label signal-key-cue-label mb-3">Key cue</p>
+              <p className="signal-key-cue-text m-0">
                 AI lowers the cost of trying. Taste, patience, and curation
                 decide which tries deserve more life.
               </p>
@@ -124,10 +118,7 @@ export default function BlogArticleLayout({
 
           <div className="signal-card p-5">
             <p className="signal-label mb-3">Continue</p>
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--signal-ink)] no-underline"
-            >
+            <Link to="/blog" className="signal-action signal-action--secondary">
               Return to all writing
               <ArrowUpRight size={15} />
             </Link>

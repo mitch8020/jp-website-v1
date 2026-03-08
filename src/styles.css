@@ -26,6 +26,8 @@
   --link-bg-hover: rgba(255, 255, 255, 0.9);
   --hero-a: rgba(79, 184, 178, 0.36);
   --hero-b: rgba(47, 106, 74, 0.2);
+  --focus-ring: #0e6f7d;
+  --focus-ring-glow: rgba(14, 111, 125, 0.18);
   --font-display-alt:
     'Syne', 'Avenir Next Condensed', 'Arial Narrow', sans-serif;
   --font-mono-alt: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
@@ -61,6 +63,8 @@
   --link-bg-hover: rgba(24, 44, 49, 0.8);
   --hero-a: rgba(96, 215, 207, 0.18);
   --hero-b: rgba(110, 200, 154, 0.12);
+  --focus-ring: #ffd37d;
+  --focus-ring-glow: rgba(255, 211, 125, 0.16);
   --signal-ink: #f3e8db;
   --signal-ink-soft: #c4c0b7;
   --signal-surface: rgba(14, 21, 27, 0.82);
@@ -94,6 +98,8 @@
     --link-bg-hover: rgba(24, 44, 49, 0.8);
     --hero-a: rgba(96, 215, 207, 0.18);
     --hero-b: rgba(110, 200, 154, 0.12);
+    --focus-ring: #ffd37d;
+    --focus-ring-glow: rgba(255, 211, 125, 0.16);
     --signal-ink: #f3e8db;
     --signal-ink-soft: #c4c0b7;
     --signal-surface: rgba(14, 21, 27, 0.82);
@@ -185,6 +191,12 @@ a {
 
 a:hover {
   color: #246f76;
+}
+
+:where(a, button):focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 6px var(--focus-ring-glow);
 }
 
 code {
@@ -289,6 +301,10 @@ a {
   transform: scaleX(1);
 }
 
+.nav-link:focus-visible {
+  border-radius: 0.8rem;
+}
+
 @media (max-width: 640px) {
   .nav-link::after {
     bottom: -4px;
@@ -298,6 +314,110 @@ a {
 .site-footer {
   border-top: 1px solid var(--line);
   background: color-mix(in oklab, var(--header-bg) 84%, transparent 16%);
+}
+
+.site-control-pill {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  border: 2px solid
+    color-mix(in oklab, var(--chip-line) 45%, var(--sea-ink) 55%);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--chip-bg) 88%, white 12%);
+  padding: 0.78rem 1rem;
+  text-decoration: none;
+  color: var(--sea-ink);
+  font-size: 0.97rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 24px rgba(30, 90, 72, 0.08);
+}
+
+.site-control-pill:hover {
+  transform: translateY(-1px);
+  background: var(--link-bg-hover);
+}
+
+.site-control-pill--brand {
+  min-height: 2.85rem;
+  padding-inline: 1rem 1.1rem;
+}
+
+.site-control-pill--soft {
+  background: color-mix(in oklab, var(--surface-strong) 86%, white 14%);
+}
+
+.site-control-pill--accent {
+  border-color: color-mix(in oklab, var(--lagoon-deep) 58%, var(--sea-ink) 42%);
+  background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--lagoon) 72%, white 28%),
+    color-mix(in oklab, var(--lagoon-deep) 68%, white 32%)
+  );
+  color: #14353a;
+}
+
+.signal-action {
+  display: inline-flex;
+  min-height: 3.1rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border: 2px solid
+    color-mix(in oklab, var(--signal-line) 35%, var(--signal-ink) 65%);
+  border-radius: 999px;
+  padding: 0.84rem 1.15rem;
+  text-decoration: none;
+  color: var(--signal-ink);
+  font-size: 0.98rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  box-shadow: 0 16px 30px rgba(17, 32, 46, 0.12);
+}
+
+.signal-action:hover {
+  transform: translateY(-1px);
+}
+
+.signal-action--primary {
+  border-color: color-mix(in oklab, var(--signal-orange) 72%, black 28%);
+  background: linear-gradient(135deg, var(--signal-orange), var(--signal-gold));
+  color: #201108;
+}
+
+.signal-action--secondary {
+  background: color-mix(in oklab, var(--signal-surface-strong) 92%, white 8%);
+  color: var(--signal-ink);
+}
+
+.signal-action--secondary:hover {
+  border-color: color-mix(
+    in oklab,
+    var(--signal-line) 18%,
+    var(--signal-ink) 82%
+  );
+}
+
+.signal-tag-pill {
+  display: inline-flex;
+  min-height: 2.4rem;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid
+    color-mix(in oklab, var(--signal-line) 30%, var(--signal-ink) 70%);
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--signal-surface-strong) 90%, white 10%);
+  padding: 0.58rem 0.92rem;
+  color: var(--signal-ink);
+  font-size: 0.84rem;
+  line-height: 1.2;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .rise-in {
@@ -383,9 +503,9 @@ a {
 
 .signal-label {
   font-family: var(--font-mono-alt);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--signal-ink-soft);
 }
@@ -394,7 +514,7 @@ a {
   border: 1px solid var(--signal-line);
   border-radius: 1.45rem;
   background: color-mix(in oklab, var(--signal-surface-strong) 90%, white 10%);
-  padding: 1rem 1.1rem;
+  padding: 1.05rem 1.15rem;
 }
 
 .orbit-field {
@@ -499,14 +619,16 @@ a {
   position: absolute;
   display: inline-flex;
   align-items: center;
-  border: 1px solid var(--signal-line);
+  min-height: 2.35rem;
+  border: 1.5px solid
+    color-mix(in oklab, var(--signal-line) 26%, var(--signal-ink) 74%);
   border-radius: 999px;
   background: color-mix(in oklab, var(--signal-surface-strong) 92%, white 8%);
-  padding: 0.48rem 0.75rem;
+  padding: 0.58rem 0.86rem;
   font-family: var(--font-mono-alt);
-  font-size: 0.67rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--signal-ink);
   box-shadow: 0 14px 26px rgba(17, 32, 46, 0.12);
@@ -554,15 +676,17 @@ a {
 
 .signal-path-index {
   display: inline-flex;
-  height: 1.85rem;
-  width: 1.85rem;
+  height: 2.1rem;
+  width: 2.1rem;
   flex: none;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  border: 1px solid var(--signal-line);
+  border: 1.5px solid
+    color-mix(in oklab, var(--signal-line) 28%, var(--signal-ink) 72%);
   font-family: var(--font-mono-alt);
-  font-size: 0.74rem;
+  font-size: 0.82rem;
+  font-weight: 700;
   color: var(--signal-ink);
 }
 
@@ -571,6 +695,39 @@ a {
   border-radius: 1.75rem;
   background: color-mix(in oklab, var(--signal-surface-strong) 88%, white 12%);
   padding: 1.35rem 1.4rem;
+}
+
+.signal-key-cue {
+  border: 2px solid
+    color-mix(in oklab, var(--signal-line) 26%, var(--signal-ink) 74%);
+  border-radius: 1.6rem;
+  background: linear-gradient(
+    155deg,
+    color-mix(in oklab, var(--signal-surface-strong) 96%, white 4%),
+    color-mix(in oklab, var(--signal-surface) 92%, white 8%)
+  );
+  padding: 1.25rem 1.2rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.52),
+    0 16px 30px rgba(17, 32, 46, 0.08);
+}
+
+.signal-key-cue-label {
+  color: color-mix(
+    in oklab,
+    var(--signal-ink-soft) 72%,
+    var(--signal-teal) 28%
+  );
+}
+
+.signal-key-cue-text {
+  max-width: 18ch;
+  font-size: 1.28rem;
+  line-height: 1.65;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--signal-ink);
+  text-wrap: balance;
 }
 
 .blog-prose {
@@ -631,10 +788,21 @@ a {
 }
 
 @media (max-width: 640px) {
+  .site-control-pill,
+  .signal-action {
+    width: 100%;
+  }
+
+  .signal-tag-pill {
+    min-height: 2.25rem;
+    font-size: 0.8rem;
+  }
+
   .orbit-chip {
-    font-size: 0.61rem;
-    letter-spacing: 0.14em;
-    padding: 0.42rem 0.62rem;
+    min-height: 2.1rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 0.46rem 0.7rem;
   }
 
   .orbit-core {
@@ -650,5 +818,15 @@ a {
   .blog-prose p {
     font-size: 0.98rem;
     line-height: 1.8;
+  }
+
+  .signal-key-cue {
+    padding: 1.05rem 1rem;
+  }
+
+  .signal-key-cue-text {
+    max-width: none;
+    font-size: 1.12rem;
+    line-height: 1.6;
   }
 }
