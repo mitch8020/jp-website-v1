@@ -1,6 +1,13 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowLeft, ArrowUpRight, Clock3, Sparkles } from 'lucide-react'
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Clock3,
+  Sparkles,
+} from 'lucide-react'
 import type { ReactNode } from 'react'
+import { blogPosts } from './blog-posts'
 import type { BlogPost } from './blog-types'
 
 type BlogArticleLayoutProps = {
@@ -12,6 +19,8 @@ export default function BlogArticleLayout({
   post,
   children,
 }: BlogArticleLayoutProps) {
+  const suggestedPosts = blogPosts.filter((p) => p.slug !== post.slug)
+
   return (
     <main className="page-wrap px-4 pb-16 pt-8 sm:pb-20 sm:pt-12">
       <section className="blog-stage rise-in overflow-hidden rounded-[2.4rem] px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
@@ -33,10 +42,10 @@ export default function BlogArticleLayout({
               </span>
             </div>
 
-            <h1 className="signal-display mt-5 max-w-4xl text-[clamp(3rem,8vw,6.4rem)] text-[var(--signal-ink)]">
+            <h1 className="signal-display mt-5 max-w-4xl text-[clamp(2.6rem,7vw,6.4rem)] text-[var(--signal-ink)]">
               {post.title}
             </h1>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--signal-ink-soft)] sm:text-lg">
+            <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--signal-ink-soft)] sm:text-lg sm:leading-[1.85]">
               {post.summary}
             </p>
 
@@ -60,7 +69,7 @@ export default function BlogArticleLayout({
             </div>
           </div>
 
-          <div className="orbit-field min-h-[320px] sm:min-h-[360px]">
+          <div className="orbit-field hidden min-h-[320px] sm:block sm:min-h-[360px]">
             <div className="orbit-ring left-[14%] top-[18%] h-[16rem] w-[16rem] sm:h-[18rem] sm:w-[18rem]" />
             <div className="orbit-ring left-[38%] top-[8%] h-[12rem] w-[12rem] [animation-duration:24s]" />
             <div className="orbit-ring left-[4%] top-[42%] h-[10rem] w-[10rem] [animation-duration:30s]" />
@@ -82,7 +91,7 @@ export default function BlogArticleLayout({
 
       <section className="mt-10 grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-          <div className="signal-card p-5">
+          <div className="signal-card rounded-[1.8rem] p-5">
             <p className="signal-label mb-3">Route map</p>
             <div className="space-y-3">
               {post.sectionLinks.map((section, index) => (
@@ -100,7 +109,7 @@ export default function BlogArticleLayout({
             </div>
           </div>
 
-          <div className="signal-card p-5">
+          <div className="signal-card rounded-[1.8rem] p-5">
             <p className="signal-label mb-3">Reading mode</p>
             <p className="m-0 text-sm leading-7 text-[var(--signal-ink-soft)]">
               This essay is written like a route sketch: small defensible
@@ -116,7 +125,7 @@ export default function BlogArticleLayout({
             </div>
           </div>
 
-          <div className="signal-card p-5">
+          <div className="signal-card rounded-[1.8rem] p-5">
             <p className="signal-label mb-3">Continue</p>
             <Link to="/blog" className="signal-action signal-action--secondary">
               Return to all writing
@@ -125,24 +134,70 @@ export default function BlogArticleLayout({
           </div>
         </aside>
 
-        <article className="signal-card overflow-hidden p-6 sm:p-8 lg:p-10">
-          <div className="blog-prose">{children}</div>
+        <div className="space-y-6">
+          <article className="signal-card overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10">
+            <div className="blog-prose">{children}</div>
 
-          <div className="signal-inline-note mt-10">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(255,138,56,0.12)] text-[var(--signal-orange)]">
-                <Sparkles size={18} />
-              </span>
-              <div>
-                <p className="signal-label mb-1">Last note</p>
-                <p className="m-0 text-sm leading-6 text-[var(--signal-ink-soft)]">
-                  Better futures rarely arrive fully formed. They are tested,
-                  curated, and made legible one iteration at a time.
-                </p>
+            <div className="signal-inline-note mt-10">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(255,138,56,0.12)] text-[var(--signal-orange)]">
+                  <Sparkles size={18} />
+                </span>
+                <div>
+                  <p className="signal-label mb-1">Last note</p>
+                  <p className="m-0 text-sm leading-6 text-[var(--signal-ink-soft)]">
+                    Better futures rarely arrive fully formed. They are tested,
+                    curated, and made legible one iteration at a time.
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </article>
+          </article>
+
+          {suggestedPosts.length > 0 && (
+            <section className="suggested-reading rise-in rounded-[2rem] p-6 sm:p-8">
+              <p className="signal-label mb-4">Continue reading</p>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {suggestedPosts.map((suggested) => (
+                  <Link
+                    key={suggested.slug}
+                    to="/blog/$slug"
+                    params={{ slug: suggested.slug }}
+                    className="suggested-card group block rounded-[1.6rem] p-5 no-underline"
+                  >
+                    <div className="flex flex-wrap items-center gap-2.5 text-xs">
+                      <span className="signal-label">{suggested.category}</span>
+                      <span className="h-1 w-1 rounded-full bg-[var(--signal-orange)]" />
+                      <span className="font-semibold tracking-wide text-[var(--signal-ink-soft)]">
+                        {suggested.readTime}
+                      </span>
+                    </div>
+                    <h3 className="mt-3 text-lg font-bold leading-snug tracking-tight text-[var(--signal-ink)]">
+                      {suggested.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-7 text-[var(--signal-ink-soft)]">
+                      {suggested.teaser}
+                    </p>
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--signal-orange)] transition-transform group-hover:translate-x-1">
+                      Read article
+                      <ArrowRight size={14} />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+
+              <div className="mt-6 flex justify-center">
+                <Link
+                  to="/blog"
+                  className="signal-action signal-action--secondary"
+                >
+                  View all writing
+                  <ArrowUpRight size={15} />
+                </Link>
+              </div>
+            </section>
+          )}
+        </div>
       </section>
     </main>
   )
