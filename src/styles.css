@@ -117,6 +117,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body,
 #app {
@@ -757,13 +761,36 @@ a {
 }
 
 .blog-prose ul {
-  margin: 1.2rem 0 0;
-  padding-left: 1.2rem;
+  margin: 1.5rem 0 0;
+  padding-left: 1.4rem;
+  list-style: none;
   color: var(--signal-ink-soft);
 }
 
+.blog-prose li {
+  position: relative;
+  padding-left: 0.6rem;
+  font-size: 1.02rem;
+  line-height: 1.88;
+}
+
+.blog-prose li::before {
+  content: '';
+  position: absolute;
+  left: -1rem;
+  top: 0.78em;
+  height: 6px;
+  width: 6px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--signal-orange), var(--signal-gold));
+  flex-shrink: 0;
+}
+
 .blog-prose li + li {
-  margin-top: 0.8rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid
+    color-mix(in oklab, var(--signal-line) 60%, transparent);
 }
 
 .blog-prose blockquote {
@@ -776,6 +803,46 @@ a {
   font-size: 1.22rem;
   line-height: 1.75;
   color: var(--signal-ink);
+}
+
+.suggested-reading {
+  border: 1px solid var(--signal-line);
+  background:
+    radial-gradient(
+      ellipse at 20% 0%,
+      rgba(255, 177, 81, 0.08),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 90% 100%,
+      rgba(71, 195, 183, 0.06),
+      transparent 50%
+    ),
+    linear-gradient(155deg, var(--signal-surface-strong), var(--signal-surface));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 20px 40px var(--signal-shadow),
+    0 6px 16px rgba(17, 32, 46, 0.05);
+  backdrop-filter: blur(8px);
+}
+
+.suggested-card {
+  border: 1px solid var(--signal-line);
+  background: color-mix(in oklab, var(--signal-surface-strong) 88%, white 12%);
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.suggested-card:hover {
+  transform: translateY(-3px);
+  border-color: color-mix(
+    in oklab,
+    var(--signal-orange) 36%,
+    var(--signal-line)
+  );
+  box-shadow: 0 16px 32px rgba(17, 32, 46, 0.12);
 }
 
 @keyframes orbit-drift {
@@ -820,6 +887,16 @@ a {
     line-height: 1.8;
   }
 
+  .blog-prose li {
+    font-size: 0.96rem;
+    line-height: 1.78;
+  }
+
+  .blog-prose li + li {
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
   .signal-key-cue {
     padding: 1.05rem 1rem;
   }
@@ -828,5 +905,13 @@ a {
     max-width: none;
     font-size: 1.12rem;
     line-height: 1.6;
+  }
+
+  .suggested-reading {
+    padding: 1.25rem;
+  }
+
+  .suggested-card {
+    padding: 1rem;
   }
 }
