@@ -24,12 +24,12 @@ export default function BlogHomePage() {
   const dateGroups = getDateGroups()
 
   function handleRandomArchiveClick() {
-    const randomPost =
-      randomArchivePool[Math.floor(Math.random() * randomArchivePool.length)]
-
-    if (!randomPost) {
+    if (randomArchivePool.length === 0) {
       return
     }
+
+    const randomPost =
+      randomArchivePool[Math.floor(Math.random() * randomArchivePool.length)]
 
     startTransition(() => {
       void navigate({
