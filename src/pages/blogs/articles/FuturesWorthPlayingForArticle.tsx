@@ -1,5 +1,7 @@
 import BlogArticleLayout from '../BlogArticleLayout'
-import type { BlogPost } from '../blog-types'
+import type { ComponentBlogPostDocument } from '../blog-types'
+import { cx, styles } from '../../../lib/style-primitives'
+import { futuresWorthPlayingForSummary } from '../manual-post-summaries'
 
 const articleSections = [
   {
@@ -73,10 +75,10 @@ const articleSections = [
 
 function FuturesWorthPlayingForArticle() {
   return (
-    <BlogArticleLayout post={futuresWorthPlayingForPost}>
+    <BlogArticleLayout post={futuresWorthPlayingForSummary}>
       {articleSections.map((section) => (
         <section key={section.id} id={section.id} className="scroll-mt-28">
-          <p className="signal-label mb-3">{section.kicker}</p>
+          <p className={cx(styles.signalLabel, 'mb-3')}>{section.kicker}</p>
           <h2>{section.label}</h2>
 
           {section.body.map((paragraph) => (
@@ -94,8 +96,8 @@ function FuturesWorthPlayingForArticle() {
           ) : null}
 
           {'note' in section ? (
-            <div className="signal-inline-note">
-              <p className="signal-label mb-2">Applied example</p>
+            <div className={styles.signalInlineNote}>
+              <p className={cx(styles.signalLabel, 'mb-2')}>Applied example</p>
               <p className="m-0 text-base leading-8 text-[var(--signal-ink-soft)]">
                 {section.note}
               </p>
@@ -107,56 +109,8 @@ function FuturesWorthPlayingForArticle() {
   )
 }
 
-export const futuresWorthPlayingForPost: BlogPost = {
-  slug: 'futures-worth-playing-for',
-  title: 'Futures Worth Playing For',
-  summary:
-    'AI makes it dramatically cheaper to explore ideas. The harder and more important work is deciding which futures deserve more attention, more craft, and more human care.',
-  teaser:
-    'A manifesto about iteration, curation, games, language, automation, and why better worlds often start by making better forms of play.',
-  strapline: 'Iteration, curation, and play as civic infrastructure.',
-  publishedAt: '2026-03-08',
-  publishedLabel: 'March 8, 2026',
-  readTime: '8 min read',
-  category: 'Manifesto',
-  tags: ['Curation', 'Play', 'Automation', 'Media', 'Systems'],
-  quote:
-    "If content is cheap, the people who matter most are the ones who can recognize what is actually worth someone's time.",
-  stats: [
-    {
-      label: 'Read',
-      value: '8 minutes',
-    },
-    {
-      label: 'Mode',
-      value: 'Manifesto essay',
-    },
-    {
-      label: 'Thread',
-      value: 'Curation over abundance',
-    },
-  ],
-  signals: [
-    {
-      title: 'Curation becomes infrastructure',
-      text: 'Abundant creation raises the value of the people and systems that can surface what is actually worth attention.',
-    },
-    {
-      title: 'Automation should feel native',
-      text: 'The best future tools extend familiar workflows instead of forcing people into identities they never asked for.',
-    },
-    {
-      title: 'Events generate real connection',
-      text: 'Shared moments lead to conversation, and conversation is still one of the strongest engines for care and cooperation.',
-    },
-    {
-      title: 'Play is a learning engine',
-      text: 'Games, shows, and repeatable rituals can teach language, strategy, and empathy faster than intimidation can.',
-    },
-  ],
-  sectionLinks: articleSections.map((section) => ({
-    id: section.id,
-    label: section.label,
-  })),
+export const futuresWorthPlayingForDocument: ComponentBlogPostDocument = {
+  ...futuresWorthPlayingForSummary,
+  kind: 'component',
   Component: FuturesWorthPlayingForArticle,
 }

@@ -1,5 +1,6 @@
 import BlogArticleLayout from '../BlogArticleLayout'
-import type { BlogPost } from '../blog-types'
+import type { ComponentBlogPostDocument } from '../blog-types'
+import { rawThoughtsSummary } from '../manual-post-summaries'
 
 const thoughts = [
   `OUR BRAINS ARE REALLY GOOD AT DREAMING OF NEW AND NOVEL WAYS TO MAKE THE WORLD BETTER, AI HELPS ITERATE ON THOSE IDEAS`,
@@ -20,7 +21,7 @@ const thoughts = [
 
 function RawThoughtsArticle() {
   return (
-    <BlogArticleLayout post={rawThoughtsPost}>
+    <BlogArticleLayout post={rawThoughtsSummary}>
       <section id="raw-thoughts" className="scroll-mt-28">
         <ul>
           {thoughts.map((thought) => (
@@ -32,58 +33,8 @@ function RawThoughtsArticle() {
   )
 }
 
-export const rawThoughtsPost: BlogPost = {
-  slug: 'futures-worth-playing-for-raw',
-  title: 'Futures Worth Playing For * [RAW THOUGHTS]',
-  summary:
-    'Unfiltered notes on AI, curation, play, automation, crypto, events, language learning, and building futures worth living in.',
-  teaser:
-    'Raw, unedited stream of consciousness on the forces shaping how we create, connect, and play.',
-  strapline: 'Unfiltered signal. No polish. All conviction.',
-  publishedAt: '2026-03-08',
-  publishedLabel: 'March 8, 2026',
-  readTime: '6 min read',
-  category: 'Raw Thoughts',
-  tags: ['AI', 'Curation', 'Play', 'Crypto', 'Events', 'Language'],
-  quote:
-    "Content is now cheap so it's up to the people who can make really good quality to curate what people should see.",
-  stats: [
-    {
-      label: 'Read',
-      value: '6 minutes',
-    },
-    {
-      label: 'Mode',
-      value: 'Raw notes',
-    },
-    {
-      label: 'Thread',
-      value: 'Unfiltered conviction',
-    },
-  ],
-  signals: [
-    {
-      title: 'AI accelerates ideation',
-      text: 'Our brains dream up futures; AI helps iterate on those ideas faster than ever before.',
-    },
-    {
-      title: 'Curation over creation',
-      text: 'When content is cheap, the real value is in curating and surfacing what matters most.',
-    },
-    {
-      title: 'Play as a learning engine',
-      text: 'Games and media teach us about ourselves and others in ways that feel like entertainment.',
-    },
-    {
-      title: 'Events drive connection',
-      text: 'Real world events spark conversations that lead to genuine human connections and care.',
-    },
-  ],
-  sectionLinks: [
-    {
-      id: 'raw-thoughts',
-      label: 'Raw thoughts',
-    },
-  ],
+export const rawThoughtsDocument: ComponentBlogPostDocument = {
+  ...rawThoughtsSummary,
+  kind: 'component',
   Component: RawThoughtsArticle,
 }

@@ -15,20 +15,56 @@ export type BlogSectionLink = {
   label: string
 }
 
-export type BlogPost = {
+export type ArchivedComment = {
+  id: string
+  parentId: string | null
+  authorName: string
+  authorUrl?: string
+  publishedAt: string
+  publishedLabel: string
+  contentHtml: string
+  replies: ArchivedComment[]
+}
+
+export type FeaturedImage = {
+  src: string
+  alt: string
+}
+
+export type BlogPostSummary = {
   slug: string
   title: string
   summary: string
   teaser: string
-  strapline: string
   publishedAt: string
   publishedLabel: string
   readTime: string
   category: string
   tags: string[]
-  quote: string
-  stats: BlogStat[]
-  signals: BlogSignal[]
-  sectionLinks: BlogSectionLink[]
+  preview?: string
+  quote?: string
+  stats?: BlogStat[]
+  signals?: BlogSignal[]
+  sectionLinks?: BlogSectionLink[]
+  source: 'manual' | 'wordpress'
+  commentCount: number
+}
+
+export type ComponentBlogPostDocument = BlogPostSummary & {
+  kind: 'component'
   Component: ComponentType
 }
+
+export type HtmlBlogPostDocument = BlogPostSummary & {
+  kind: 'html'
+  html: string
+  comments: ArchivedComment[]
+  featuredImage?: FeaturedImage
+}
+
+export type BlogPostDocument = ComponentBlogPostDocument | HtmlBlogPostDocument
+
+export type BlogDocumentLoaderMap = Record<
+  string,
+  () => Promise<BlogPostDocument>
+>

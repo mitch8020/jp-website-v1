@@ -7,32 +7,79 @@ import {
   Sparkles,
 } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { cx, styles } from '../../lib/style-primitives'
+import ArchivedComments from './ArchivedComments'
 import { blogPosts } from './blog-posts'
-import type { BlogPost } from './blog-types'
+import type { ArchivedComment, BlogPostSummary } from './blog-types'
 
 type BlogArticleLayoutProps = {
-  post: BlogPost
-  children: ReactNode
+  post: BlogPostSummary
+  children?: ReactNode
+  comments?: ArchivedComment[]
+  html?: string
+  leadingVisual?: ReactNode
+  proseClassName?: string
 }
 
 export default function BlogArticleLayout({
   post,
   children,
+  comments = [],
+  html,
+  leadingVisual,
+  proseClassName = '',
 }: BlogArticleLayoutProps) {
-  const suggestedPosts = blogPosts.filter((p) => p.slug !== post.slug)
+  const currentTags = new Set(post.tags.map((t) => t.toLowerCase()))
+  const relatedByTopic = blogPosts
+    .filter((p) => p.slug !== post.slug)
+    .map((p) => ({
+      post: p,
+      overlap: p.tags.filter((t) => currentTags.has(t.toLowerCase())).length,
+    }))
+    .filter(({ overlap }) => overlap > 0)
+    .sort((a, b) => b.overlap - a.overlap)
+    .slice(0, 2)
+    .map(({ post: p }) => p)
+
+  const currentIndex = blogPosts.findIndex((p) => p.slug === post.slug)
+  const newerPost = currentIndex > 0 ? blogPosts[currentIndex - 1] : undefined
+  const olderPost =
+    currentIndex >= 0 && currentIndex < blogPosts.length - 1
+      ? blogPosts[currentIndex + 1]
+      : undefined
+
+  const readingModeCopy =
+    post.source === 'wordpress'
+      ? 'This entry was restored from the original WordPress archive with light cleanup, preserved dates, remapped self-links, and archived reader comments when they existed.'
+      : 'This essay is written like a route sketch: small defensible conclusions stacked until a larger future becomes visible.'
+
+  const keyCue = post.signals?.[0]?.text ?? post.quote ?? post.summary
+  const closingNote =
+    post.source === 'wordpress'
+      ? 'Archive work matters because old thoughts only stay useful if they remain legible, searchable, and connected to the conversations around them.'
+      : 'Better futures rarely arrive fully formed. They are tested, curated, and made legible one iteration at a time.'
 
   return (
-    <main className="page-wrap px-4 pb-16 pt-8 sm:pb-20 sm:pt-12">
-      <section className="blog-stage rise-in overflow-hidden rounded-[2.4rem] px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
-        <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
+    <main className={cx(styles.pageWrap, 'px-4 pb-16 pt-8 sm:pb-20 sm:pt-12')}>
+      <section
+        className={cx(
+          styles.blogStage,
+          styles.riseIn,
+          'rounded-[2.4rem] px-5 py-5 sm:px-7 sm:py-6 lg:px-8 lg:py-7',
+        )}
+      >
+        <div className="grid gap-5 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div className="relative z-10">
-            <Link to="/blog" className="signal-action signal-action--secondary">
+            <Link
+              to="/blog"
+              className={cx(styles.signalAction, styles.signalActionSecondary)}
+            >
               <ArrowLeft size={16} />
               Back to the journal
             </Link>
 
-            <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-[var(--signal-ink-soft)]">
-              <span className="signal-label">{post.category}</span>
+            <div className="mt-4 flex flex-wrap items-center gap-3 text-sm text-[var(--signal-ink-soft)]">
+              <span className={styles.signalLabel}>{post.category}</span>
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--signal-orange)]" />
               <span>{post.publishedLabel}</span>
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--signal-teal)]" />
@@ -42,47 +89,94 @@ export default function BlogArticleLayout({
               </span>
             </div>
 
-            <h1 className="signal-display mt-5 max-w-4xl text-[clamp(2.6rem,7vw,6.4rem)] text-[var(--signal-ink)]">
+            <h1
+              className={cx(
+                styles.signalDisplay,
+                'mt-4 max-w-4xl text-[clamp(2rem,4.5vw,3.6rem)] text-[var(--signal-ink)]',
+              )}
+            >
               {post.title}
             </h1>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--signal-ink-soft)] sm:text-lg sm:leading-[1.85]">
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--signal-ink-soft)] sm:text-base sm:leading-8">
               {post.summary}
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-2.5">
-              {post.tags.map((tag) => (
-                <span key={tag} className="signal-tag-pill">
-                  {tag}
-                </span>
-              ))}
-            </div>
+            {post.tags.length > 0 ? (
+              <div className="mt-4 flex flex-wrap gap-2.5">
+                {post.tags.map((tag) => (
+                  <Link
+                    key={tag}
+                    to="/blog/tag/$tag"
+                    params={{ tag: tag.toLowerCase() }}
+                    className={cx(
+                      styles.signalTagPill,
+                      'no-underline transition-[transform,border-color,box-shadow] duration-[200ms] ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--signal-orange)_36%,var(--signal-line))] hover:shadow-[0_8px_16px_rgba(17,32,46,0.10)]',
+                    )}
+                  >
+                    {tag}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
-              {post.stats.map((stat) => (
-                <div key={stat.label} className="signal-stat">
-                  <p className="signal-label mb-2">{stat.label}</p>
-                  <p className="m-0 text-sm leading-6 text-[var(--signal-ink)] sm:text-base">
-                    {stat.value}
-                  </p>
-                </div>
-              ))}
-            </div>
+            {post.stats && post.stats.length > 0 ? (
+              <div className="mt-5 grid gap-3 sm:grid-cols-3">
+                {post.stats.map((stat) => (
+                  <div key={stat.label} className={styles.signalStat}>
+                    <p className={cx(styles.signalLabel, 'mb-1')}>
+                      {stat.label}
+                    </p>
+                    <p className="m-0 text-sm leading-6 text-[var(--signal-ink)] sm:text-base">
+                      {stat.value}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </div>
 
-          <div className="orbit-field hidden min-h-[320px] sm:block sm:min-h-[360px]">
-            <div className="orbit-ring left-[14%] top-[18%] h-[16rem] w-[16rem] sm:h-[18rem] sm:w-[18rem]" />
-            <div className="orbit-ring left-[38%] top-[8%] h-[12rem] w-[12rem] [animation-duration:24s]" />
-            <div className="orbit-ring left-[4%] top-[42%] h-[10rem] w-[10rem] [animation-duration:30s]" />
+          <div
+            className={cx(
+              styles.orbitField,
+              'hidden min-h-[260px] sm:block sm:min-h-[300px]',
+            )}
+          >
+            <div
+              className={cx(
+                styles.orbitRing,
+                'left-[14%] top-[18%] h-[16rem] w-[16rem] sm:h-[18rem] sm:w-[18rem]',
+              )}
+            />
+            <div
+              className={cx(
+                styles.orbitRing,
+                'left-[38%] top-[8%] h-[12rem] w-[12rem] [animation-duration:24s]',
+              )}
+            />
+            <div
+              className={cx(
+                styles.orbitRing,
+                'left-[4%] top-[42%] h-[10rem] w-[10rem] [animation-duration:30s]',
+              )}
+            />
 
-            <span className="orbit-chip left-[10%] top-[12%]">Taste</span>
-            <span className="orbit-chip right-[14%] top-[18%]">Play</span>
-            <span className="orbit-chip left-[16%] bottom-[18%]">Care</span>
-            <span className="orbit-chip right-[8%] bottom-[22%]">Signal</span>
+            <span className={cx(styles.orbitChip, 'left-[10%] top-[12%]')}>
+              Taste
+            </span>
+            <span className={cx(styles.orbitChip, 'right-[14%] top-[18%]')}>
+              Play
+            </span>
+            <span className={cx(styles.orbitChip, 'left-[16%] bottom-[18%]')}>
+              Care
+            </span>
+            <span className={cx(styles.orbitChip, 'right-[8%] bottom-[22%]')}>
+              Signal
+            </span>
 
-            <div className="orbit-core">
-              <p className="signal-label mb-3">Featured line</p>
+            <div className={styles.orbitCore}>
+              <p className={cx(styles.signalLabel, 'mb-3')}>Featured line</p>
               <p className="m-0 text-xl leading-8 text-[var(--signal-ink)] sm:text-2xl sm:leading-9">
-                {post.quote}
+                {post.quote ?? post.summary}
               </p>
             </div>
           </div>
@@ -91,43 +185,52 @@ export default function BlogArticleLayout({
 
       <section className="mt-10 grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
         <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
-          <div className="signal-card rounded-[1.8rem] p-5">
-            <p className="signal-label mb-3">Route map</p>
-            <div className="space-y-3">
-              {post.sectionLinks.map((section, index) => (
-                <a
-                  key={section.id}
-                  href={`#${section.id}`}
-                  className="signal-path no-underline"
-                >
-                  <span className="signal-path-index">{index + 1}</span>
-                  <span className="text-sm leading-6 text-[var(--signal-ink)]">
-                    {section.label}
-                  </span>
-                </a>
-              ))}
+          {post.sectionLinks && post.sectionLinks.length > 0 ? (
+            <div className={cx(styles.signalCard, 'rounded-[1.8rem] p-5')}>
+              <p className={cx(styles.signalLabel, 'mb-3')}>Route map</p>
+              <div className="space-y-3">
+                {post.sectionLinks.map((section, index) => (
+                  <a
+                    key={section.id}
+                    href={`#${section.id}`}
+                    className={styles.signalPath}
+                  >
+                    <span className={styles.signalPathIndex}>{index + 1}</span>
+                    <span className="text-sm leading-6 text-[var(--signal-ink)]">
+                      {section.label}
+                    </span>
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : null}
 
-          <div className="signal-card rounded-[1.8rem] p-5">
-            <p className="signal-label mb-3">Reading mode</p>
+          <div className={cx(styles.signalCard, 'rounded-[1.8rem] p-5')}>
+            <p className={cx(styles.signalLabel, 'mb-3')}>Reading mode</p>
             <p className="m-0 text-sm leading-7 text-[var(--signal-ink-soft)]">
-              This essay is written like a route sketch: small defensible
-              conclusions stacked until a larger future becomes visible.
+              {readingModeCopy}
             </p>
 
-            <div className="signal-key-cue mt-5">
-              <p className="signal-label signal-key-cue-label mb-3">Key cue</p>
-              <p className="signal-key-cue-text m-0">
-                AI lowers the cost of trying. Taste, patience, and curation
-                decide which tries deserve more life.
+            <div className={cx(styles.signalKeyCue, 'mt-5')}>
+              <p
+                className={cx(
+                  styles.signalLabel,
+                  styles.signalKeyCueLabel,
+                  'mb-3',
+                )}
+              >
+                Key cue
               </p>
+              <p className={cx(styles.signalKeyCueText, 'm-0')}>{keyCue}</p>
             </div>
           </div>
 
-          <div className="signal-card rounded-[1.8rem] p-5">
-            <p className="signal-label mb-3">Continue</p>
-            <Link to="/blog" className="signal-action signal-action--secondary">
+          <div className={cx(styles.signalCard, 'rounded-[1.8rem] p-5')}>
+            <p className={cx(styles.signalLabel, 'mb-3')}>Continue</p>
+            <Link
+              to="/blog"
+              className={cx(styles.signalAction, styles.signalActionSecondary)}
+            >
               Return to all writing
               <ArrowUpRight size={15} />
             </Link>
@@ -135,68 +238,163 @@ export default function BlogArticleLayout({
         </aside>
 
         <div className="space-y-6">
-          <article className="signal-card overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10">
-            <div className="blog-prose">{children}</div>
+          <article
+            className={cx(
+              styles.signalCard,
+              'overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:p-10',
+            )}
+          >
+            {leadingVisual}
 
-            <div className="signal-inline-note mt-10">
+            <div
+              className={cx(
+                'blog-prose prose max-w-none prose-neutral dark:prose-invert',
+                '[--tw-prose-body:var(--signal-ink-soft)] [--tw-prose-headings:var(--signal-ink)] [--tw-prose-links:var(--signal-orange)] [--tw-prose-bold:var(--signal-ink)] [--tw-prose-counters:var(--signal-ink-soft)] [--tw-prose-bullets:var(--signal-orange)] [--tw-prose-quotes:var(--signal-ink)] [--tw-prose-quote-borders:var(--signal-orange)] [--tw-prose-captions:var(--signal-ink-soft)]',
+                proseClassName,
+              )}
+              dangerouslySetInnerHTML={html ? { __html: html } : undefined}
+            >
+              {html ? null : children}
+            </div>
+
+            <div className={cx(styles.signalInlineNote, 'mt-10')}>
               <div className="flex flex-wrap items-center gap-3">
                 <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[rgba(255,138,56,0.12)] text-[var(--signal-orange)]">
                   <Sparkles size={18} />
                 </span>
                 <div>
-                  <p className="signal-label mb-1">Last note</p>
+                  <p className={cx(styles.signalLabel, 'mb-1')}>Last note</p>
                   <p className="m-0 text-sm leading-6 text-[var(--signal-ink-soft)]">
-                    Better futures rarely arrive fully formed. They are tested,
-                    curated, and made legible one iteration at a time.
+                    {closingNote}
                   </p>
                 </div>
               </div>
             </div>
           </article>
 
-          {suggestedPosts.length > 0 && (
-            <section className="suggested-reading rise-in rounded-[2rem] p-6 sm:p-8">
-              <p className="signal-label mb-4">Continue reading</p>
-              <div className="grid gap-4 sm:grid-cols-2">
-                {suggestedPosts.map((suggested) => (
-                  <Link
-                    key={suggested.slug}
-                    to="/blog/$slug"
-                    params={{ slug: suggested.slug }}
-                    className="suggested-card group block rounded-[1.6rem] p-5 no-underline"
-                  >
-                    <div className="flex flex-wrap items-center gap-2.5 text-xs">
-                      <span className="signal-label">{suggested.category}</span>
-                      <span className="h-1 w-1 rounded-full bg-[var(--signal-orange)]" />
-                      <span className="font-semibold tracking-wide text-[var(--signal-ink-soft)]">
-                        {suggested.readTime}
-                      </span>
-                    </div>
-                    <h3 className="mt-3 text-lg font-bold leading-snug tracking-tight text-[var(--signal-ink)]">
-                      {suggested.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-7 text-[var(--signal-ink-soft)]">
-                      {suggested.teaser}
-                    </p>
-                    <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--signal-orange)] transition-transform group-hover:translate-x-1">
-                      Read article
-                      <ArrowRight size={14} />
-                    </span>
-                  </Link>
-                ))}
-              </div>
+          <ArchivedComments comments={comments} />
 
-              <div className="mt-6 flex justify-center">
-                <Link
-                  to="/blog"
-                  className="signal-action signal-action--secondary"
-                >
-                  View all writing
-                  <ArrowUpRight size={15} />
-                </Link>
+          <section
+            className={cx(
+              styles.suggestedReading,
+              styles.riseIn,
+              'rounded-[2rem] p-6 sm:p-8',
+            )}
+          >
+            <p className={cx(styles.signalLabel, 'mb-4')}>Continue reading</p>
+
+            {relatedByTopic.length > 0 && (
+              <>
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-[var(--signal-ink-soft)]">
+                  Related by topic
+                </p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {relatedByTopic.map((suggested) => (
+                    <Link
+                      key={suggested.slug}
+                      to="/blog/$slug"
+                      params={{ slug: suggested.slug }}
+                      className={cx(
+                        styles.suggestedCard,
+                        'group block rounded-[1.6rem] p-5 no-underline',
+                      )}
+                    >
+                      <div className="flex flex-wrap items-center gap-2.5 text-xs">
+                        <span className={styles.signalLabel}>
+                          {suggested.category}
+                        </span>
+                        <span className="h-1 w-1 rounded-full bg-[var(--signal-orange)]" />
+                        <span className="font-semibold tracking-wide text-[var(--signal-ink-soft)]">
+                          {suggested.readTime}
+                        </span>
+                      </div>
+                      <h3 className="mt-3 text-lg font-bold leading-snug tracking-tight text-[var(--signal-ink)]">
+                        {suggested.title}
+                      </h3>
+                      <p className="mt-2 text-sm leading-7 text-[var(--signal-ink-soft)]">
+                        {suggested.teaser}
+                      </p>
+                      <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-bold text-[var(--signal-orange)] transition-transform group-hover:translate-x-1">
+                        Read article
+                        <ArrowRight size={14} />
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {(olderPost || newerPost) && (
+              <div className={cx(relatedByTopic.length > 0 && 'mt-6')}>
+                <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-[var(--signal-ink-soft)]">
+                  Previous / Next
+                </p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {olderPost ? (
+                    <Link
+                      to="/blog/$slug"
+                      params={{ slug: olderPost.slug }}
+                      className={cx(
+                        styles.suggestedCard,
+                        'group flex items-center gap-4 rounded-[1.6rem] p-5 no-underline',
+                      )}
+                    >
+                      <ArrowLeft
+                        size={18}
+                        className="shrink-0 text-[var(--signal-orange)] transition-transform group-hover:-translate-x-1"
+                      />
+                      <div className="min-w-0">
+                        <p className={cx(styles.signalLabel, 'mb-1')}>
+                          Previous
+                        </p>
+                        <p className="m-0 truncate text-sm font-bold leading-snug text-[var(--signal-ink)]">
+                          {olderPost.title}
+                        </p>
+                      </div>
+                    </Link>
+                  ) : (
+                    <div />
+                  )}
+                  {newerPost ? (
+                    <Link
+                      to="/blog/$slug"
+                      params={{ slug: newerPost.slug }}
+                      className={cx(
+                        styles.suggestedCard,
+                        'group flex items-center gap-4 rounded-[1.6rem] p-5 no-underline text-right',
+                      )}
+                    >
+                      <div className="min-w-0 flex-1">
+                        <p className={cx(styles.signalLabel, 'mb-1')}>Next</p>
+                        <p className="m-0 truncate text-sm font-bold leading-snug text-[var(--signal-ink)]">
+                          {newerPost.title}
+                        </p>
+                      </div>
+                      <ArrowRight
+                        size={18}
+                        className="shrink-0 text-[var(--signal-orange)] transition-transform group-hover:translate-x-1"
+                      />
+                    </Link>
+                  ) : (
+                    <div />
+                  )}
+                </div>
               </div>
-            </section>
-          )}
+            )}
+
+            <div className="mt-6 flex justify-center">
+              <Link
+                to="/blog"
+                className={cx(
+                  styles.signalAction,
+                  styles.signalActionSecondary,
+                )}
+              >
+                View all writing
+                <ArrowUpRight size={15} />
+              </Link>
+            </div>
+          </section>
         </div>
       </section>
     </main>

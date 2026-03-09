@@ -1,11 +1,27 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
-import { getBlogPostBySlug } from '../../pages/blogs/blog-posts'
+import { cx, styles } from '../../lib/style-primitives'
+import ImportedBlogPostPage from '../../pages/blogs/ImportedBlogPostPage'
+import { getManualPostDocumentBySlug } from '../../pages/blogs/manual-post-documents'
+import {
+  getBlogPostSummaryBySlug,
+  loadBlogPostDocument,
+} from '../../pages/blogs/blog-posts'
 
 export const Route = createFileRoute('/blog/$slug')({
+  loader: async ({ params }) => {
+    const summary = getBlogPostSummaryBySlug(params.slug)
+
+    return {
+      post:
+        summary?.source === 'wordpress'
+          ? await loadBlogPostDocument(params.slug)
+          : undefined,
+    }
+  },
   component: BlogArticleRoute,
   head: ({ params }) => {
-    const post = getBlogPostBySlug(params.slug)
+    const post = getBlogPostSummaryBySlug(params.slug)
 
     return {
       meta: [
@@ -27,14 +43,27 @@ export const Route = createFileRoute('/blog/$slug')({
 
 function BlogArticleRoute() {
   const { slug } = Route.useParams()
-  const post = getBlogPostBySlug(slug)
+  const { post } = Route.useLoaderData()
+  const manualPost = getManualPostDocumentBySlug(slug)
+  const resolvedPost = post ?? manualPost
 
-  if (!post) {
+  if (!resolvedPost) {
     return (
-      <main className="page-wrap px-4 pb-16 pt-10 sm:pb-20">
-        <section className="signal-card rise-in rounded-[2.2rem] p-6 sm:p-8">
-          <p className="signal-label mb-3">Missing article</p>
-          <h1 className="signal-display text-[clamp(2.4rem,6vw,4.4rem)] text-[var(--signal-ink)]">
+      <main className={cx(styles.pageWrap, 'px-4 pb-16 pt-10 sm:pb-20')}>
+        <section
+          className={cx(
+            styles.signalCard,
+            styles.riseIn,
+            'rounded-[2.2rem] p-6 sm:p-8',
+          )}
+        >
+          <p className={cx(styles.signalLabel, 'mb-3')}>Missing article</p>
+          <h1
+            className={cx(
+              styles.signalDisplay,
+              'text-[clamp(2.4rem,6vw,4.4rem)] text-[var(--signal-ink)]',
+            )}
+          >
             Nothing is orbiting at "{slug}" yet.
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-8 text-[var(--signal-ink-soft)]">
@@ -43,7 +72,11 @@ function BlogArticleRoute() {
           </p>
           <Link
             to="/blog"
-            className="signal-action signal-action--secondary mt-6"
+            className={cx(
+              styles.signalAction,
+              styles.signalActionSecondary,
+              'mt-6',
+            )}
           >
             <ArrowLeft size={16} />
             Return to the journal
@@ -53,7 +86,10 @@ function BlogArticleRoute() {
     )
   }
 
-  const Article = post.Component
+  if (resolvedPost.kind === 'html') {
+    return <ImportedBlogPostPage post={resolvedPost} />
+  }
 
+  const Article = resolvedPost.Component
   return <Article />
 }
