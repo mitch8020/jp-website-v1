@@ -13,6 +13,8 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BlogIndexRouteImport } from './routes/blog/index'
 import { Route as BlogSlugRouteImport } from './routes/blog/$slug'
+import { Route as BlogTagTagRouteImport } from './routes/blog/tag/$tag'
+import { Route as BlogDateDateRouteImport } from './routes/blog/date/$date'
 
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
@@ -34,18 +36,32 @@ const BlogSlugRoute = BlogSlugRouteImport.update({
   path: '/blog/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BlogTagTagRoute = BlogTagTagRouteImport.update({
+  id: '/blog/tag/$tag',
+  path: '/blog/tag/$tag',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BlogDateDateRoute = BlogDateDateRouteImport.update({
+  id: '/blog/date/$date',
+  path: '/blog/date/$date',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/blog/date/$date': typeof BlogDateDateRoute
+  '/blog/tag/$tag': typeof BlogTagTagRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/blog/date/$date': typeof BlogDateDateRoute
+  '/blog/tag/$tag': typeof BlogTagTagRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +69,34 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/blog/date/$date': typeof BlogDateDateRoute
+  '/blog/tag/$tag': typeof BlogTagTagRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/blog/$slug' | '/blog/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/blog/$slug'
+    | '/blog/'
+    | '/blog/date/$date'
+    | '/blog/tag/$tag'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/blog/$slug' | '/blog'
-  id: '__root__' | '/' | '/about' | '/blog/$slug' | '/blog/'
+  to:
+    | '/'
+    | '/about'
+    | '/blog/$slug'
+    | '/blog'
+    | '/blog/date/$date'
+    | '/blog/tag/$tag'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/blog/$slug'
+    | '/blog/'
+    | '/blog/date/$date'
+    | '/blog/tag/$tag'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +104,8 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   BlogSlugRoute: typeof BlogSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  BlogDateDateRoute: typeof BlogDateDateRoute
+  BlogTagTagRoute: typeof BlogTagTagRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +138,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BlogSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/blog/tag/$tag': {
+      id: '/blog/tag/$tag'
+      path: '/blog/tag/$tag'
+      fullPath: '/blog/tag/$tag'
+      preLoaderRoute: typeof BlogTagTagRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/blog/date/$date': {
+      id: '/blog/date/$date'
+      path: '/blog/date/$date'
+      fullPath: '/blog/date/$date'
+      preLoaderRoute: typeof BlogDateDateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +160,8 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   BlogSlugRoute: BlogSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
+  BlogDateDateRoute: BlogDateDateRoute,
+  BlogTagTagRoute: BlogTagTagRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
