@@ -183,10 +183,12 @@ export default function BlogArticleLayout({
         </div>
       </section>
 
-      <section className="mt-10 grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-        <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+      <section className="mt-10 grid min-w-0 gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
+        <aside className="min-w-0 space-y-4 lg:sticky lg:top-24 lg:self-start">
           {post.sectionLinks && post.sectionLinks.length > 0 ? (
-            <div className={cx(styles.signalCard, 'rounded-[1.8rem] p-5')}>
+            <div
+              className={cx(styles.signalCard, 'min-w-0 rounded-[1.8rem] p-5')}
+            >
               <p className={cx(styles.signalLabel, 'mb-3')}>Route map</p>
               <div className="space-y-3">
                 {post.sectionLinks.map((section, index) => (
@@ -196,7 +198,7 @@ export default function BlogArticleLayout({
                     className={styles.signalPath}
                   >
                     <span className={styles.signalPathIndex}>{index + 1}</span>
-                    <span className="text-sm leading-6 text-[var(--signal-ink)]">
+                    <span className="min-w-0 flex-1 text-sm leading-6 text-[var(--signal-ink)]">
                       {section.label}
                     </span>
                   </a>
@@ -205,7 +207,9 @@ export default function BlogArticleLayout({
             </div>
           ) : null}
 
-          <div className={cx(styles.signalCard, 'rounded-[1.8rem] p-5')}>
+          <div
+            className={cx(styles.signalCard, 'min-w-0 rounded-[1.8rem] p-5')}
+          >
             <p className={cx(styles.signalLabel, 'mb-3')}>Reading mode</p>
             <p className="m-0 text-sm leading-7 text-[var(--signal-ink-soft)]">
               {readingModeCopy}
@@ -225,7 +229,9 @@ export default function BlogArticleLayout({
             </div>
           </div>
 
-          <div className={cx(styles.signalCard, 'rounded-[1.8rem] p-5')}>
+          <div
+            className={cx(styles.signalCard, 'min-w-0 rounded-[1.8rem] p-5')}
+          >
             <p className={cx(styles.signalLabel, 'mb-3')}>Continue</p>
             <Link
               to="/blog"
@@ -237,7 +243,7 @@ export default function BlogArticleLayout({
           </div>
         </aside>
 
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <article
             className={cx(
               styles.signalCard,
@@ -278,7 +284,7 @@ export default function BlogArticleLayout({
             className={cx(
               styles.suggestedReading,
               styles.riseIn,
-              'rounded-[2rem] p-6 sm:p-8',
+              'min-w-0 rounded-[2rem] p-6 sm:p-8',
             )}
           >
             <p className={cx(styles.signalLabel, 'mb-4')}>Continue reading</p>
@@ -288,7 +294,7 @@ export default function BlogArticleLayout({
                 <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-[var(--signal-ink-soft)]">
                   Related by topic
                 </p>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid min-w-0 gap-4 sm:grid-cols-2">
                   {relatedByTopic.map((suggested) => (
                     <Link
                       key={suggested.slug}
@@ -296,7 +302,7 @@ export default function BlogArticleLayout({
                       params={{ slug: suggested.slug }}
                       className={cx(
                         styles.suggestedCard,
-                        'group block rounded-[1.6rem] p-5 no-underline',
+                        'group block min-w-0 rounded-[1.6rem] p-5 no-underline',
                       )}
                     >
                       <div className="flex flex-wrap items-center gap-2.5 text-xs">
@@ -329,14 +335,14 @@ export default function BlogArticleLayout({
                 <p className="mb-3 text-xs font-bold uppercase tracking-[0.14em] text-[var(--signal-ink-soft)]">
                   Previous / Next
                 </p>
-                <div className="grid gap-4 sm:grid-cols-2">
+                <div className="grid min-w-0 gap-4 sm:grid-cols-2">
                   {olderPost ? (
                     <Link
                       to="/blog/$slug"
                       params={{ slug: olderPost.slug }}
                       className={cx(
                         styles.suggestedCard,
-                        'group flex items-center gap-4 rounded-[1.6rem] p-5 no-underline',
+                        'group flex min-w-0 w-full items-center gap-4 rounded-[1.6rem] p-5 no-underline',
                       )}
                     >
                       <ArrowLeft
@@ -361,7 +367,7 @@ export default function BlogArticleLayout({
                       params={{ slug: newerPost.slug }}
                       className={cx(
                         styles.suggestedCard,
-                        'group flex items-center gap-4 rounded-[1.6rem] p-5 no-underline text-right',
+                        'group flex min-w-0 w-full items-center gap-4 rounded-[1.6rem] p-5 no-underline text-right',
                       )}
                     >
                       <div className="min-w-0 flex-1">

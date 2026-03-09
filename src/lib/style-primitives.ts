@@ -108,7 +108,7 @@ export const styles = {
     'absolute left-1/2 top-1/2 w-[min(74%,21rem)] -translate-x-1/2 -translate-y-1/2 rounded-[1.75rem] border border-[var(--signal-line)] bg-[color-mix(in_oklab,var(--signal-surface-strong)_92%,white_8%)] px-[1.4rem] py-[1.35rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_24px_44px_rgba(17,32,46,0.16)] max-sm:w-[min(78%,17rem)] max-sm:px-[1.05rem] max-sm:py-4',
 
   signalPath: cx(
-    'flex items-start gap-[0.9rem] rounded-2xl px-[0.8rem] py-3 no-underline',
+    'flex min-w-0 items-start gap-[0.9rem] rounded-2xl px-[0.8rem] py-3 no-underline',
     'hover:translate-x-[2px] hover:bg-[rgba(255,255,255,0.38)] dark:hover:bg-[rgba(255,255,255,0.04)]',
     transitionBase,
   ),
