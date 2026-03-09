@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { cx, styles } from '../lib/style-primitives'
 
 type ThemeMode = 'light' | 'dark' | 'auto'
 
@@ -73,7 +74,11 @@ export default function ThemeToggle() {
       onClick={toggleMode}
       aria-label={label}
       title={label}
-      className="site-control-pill site-control-pill--soft"
+      className={cx(
+        styles.siteControlPill,
+        styles.siteControlPillSoft,
+        styles.headerControlPill,
+      )}
     >
       {mode === 'auto' ? 'Auto' : mode === 'dark' ? 'Dark' : 'Light'}
     </button>
