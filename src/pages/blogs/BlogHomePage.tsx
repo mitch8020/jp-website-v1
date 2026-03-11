@@ -104,7 +104,7 @@ export default function BlogHomePage() {
           <div
             className={cx(
               styles.orbitField,
-              'hidden min-h-[260px] sm:block sm:min-h-[300px]',
+              'hidden min-h-[260px] sm:block sm:min-h-[360px] lg:min-h-[420px]',
             )}
           >
             <div
@@ -272,7 +272,7 @@ export default function BlogHomePage() {
             Three recent essays stay in view.
           </h2>
           <p className="mt-4 text-base leading-8 text-[var(--signal-ink-soft)]">
-            The orbit keeps the latest four entries within reach while the rest
+            The orbit keeps the latest three entries within reach while the rest
             of the archive stays available for wandering. If you want a deeper
             cut, jump to a random archive piece and see what still resonates.
           </p>
