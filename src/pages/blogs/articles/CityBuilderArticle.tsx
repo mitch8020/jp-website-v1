@@ -1,9 +1,29 @@
+import type { ReactNode } from 'react'
 import BlogArticleLayout from '../BlogArticleLayout'
 import type { ComponentBlogPostDocument } from '../blog-types'
 import { cx, styles } from '../../../lib/style-primitives'
 import { cityBuilderSummary } from '../manual-post-summaries'
 
-const articleSections = [
+const link = (href: string, text: string) => (
+  <a href={href} target="_blank" rel="noopener noreferrer">
+    {text}
+  </a>
+)
+
+const hundredDevs = link('https://100devs.org/', '100 Devs')
+const ivStudio = link('https://shop.iv.studio/', 'IV Studio')
+
+type ArticleSection = {
+  id: string
+  label: string
+  kicker: string
+  body: ReactNode[]
+  quote?: string
+  list?: ReactNode[]
+  note?: ReactNode
+}
+
+const articleSections: ArticleSection[] = [
   {
     id: 'games-that-work',
     label: 'What if a video game was actually professional software?',
@@ -47,12 +67,12 @@ const articleSections = [
     kicker: 'Signal 04',
     body: [
       `This is not a fantasy. There is a concrete path from where Taliho is today to a game development company. Taliho already builds software engines for construction companies. That is the foundation. The next layer is people.`,
-      `100 Devs provides free training for people who want to learn software engineering. Taliho gives 100 Devs graduates the repeatable, actionable knowledge on how to leverage modern AI tools to their benefit, for free. Taliho hires those graduates and dedicates one software engineer per company as an in-house developer paid by Taliho. That engineer handles all software development, maintenance, tool integrations, and automation for that one company as a premium service.`,
+      <>{hundredDevs} provides free training for people who want to learn software engineering. Taliho gives {hundredDevs} graduates the repeatable, actionable knowledge on how to leverage modern AI tools to their benefit, for free. Taliho hires those graduates and dedicates one software engineer per company as an in-house developer paid by Taliho. That engineer handles all software development, maintenance, tool integrations, and automation for that one company as a premium service.</>,
       `From that profitable base, Taliho finds software engineers on the team who want to be game developers and starts investing in game development skills. The transition is organic. The funding comes from existing revenue. The talent pipeline is already built.`,
     ],
     list: [
       'Taliho builds the SaaS engine for construction.',
-      '100 Devs provides the talent pipeline for free.',
+      <>{hundredDevs} provides the talent pipeline for free.</>,
       'Dedicated engineers per company generate premium revenue.',
       'Game-passionate engineers transition into game development.',
     ],
@@ -66,7 +86,7 @@ const articleSections = [
       `Step one is a Playground Design Simulator or City Park Design Simulator. Find real-world playground designers and city park designers. Get their feedback on what makes software genuinely useful for their professional work. The twist is that the "software" is actually a video game. Iterate on what makes a great game in general while solving a real professional need.`,
       `Step two is a Bridge Design Simulator. More complex engineering, more variables, more data. Take the lessons from the first game, apply them, and repeat the process. Step three is the City Planner Simulator: the full vision with traffic, utilities, weather, zoning, and every variable that makes city planning genuinely hard. Easy mode reduces variables for accessibility. Hard mode is the real thing.`,
     ],
-    note: 'IV Studio, a board game company developing their first in-house video game, helps validate what makes a good game, how to run a solid Kickstarter, and how to market effectively.',
+    note: <>{ivStudio}, a board game company, helps validate what makes a good game, how to run a solid Kickstarter, and how to market effectively.</>,
   },
   {
     id: 'kickstarter-and-community',
@@ -74,12 +94,12 @@ const articleSections = [
     kicker: 'Signal 06',
     body: [
       `Before writing a single line of game code, there is a marketing website. The website communicates the grand vision: what the City Planner Simulator will eventually become, why it matters, and how people can be part of making it happen. Vision first, then funding, then building.`,
-      `A Kickstarter page gathers the funds to develop the first game. The city itself could fund game development. The community that benefits from the tool helps pay for its creation. The developers building the game are 100 Devs graduates and Taliho software engineers who are already paid and already trained.`,
+      <>A Kickstarter page gathers the funds to develop the first game. The city itself could fund game development. The community that benefits from the tool helps pay for its creation. The developers building the game are {hundredDevs} graduates and Taliho software engineers who are already paid and already trained.</>,
       `Each game release feeds the next one. What worked gets amplified. What did not work gets cut. The iteration cycle that makes software development powerful gets applied to game development with the same discipline. Playground Simulator ships. Bridge Simulator ships. City Planner Simulator ships. Each one better than the last because each one was built on real lessons, real feedback, and real professional use.`,
     ],
     quote: 'Vision first, then funding, then building. Each game ships better than the last because each one is built on real lessons.',
   },
-] as const
+]
 
 function CityBuilderArticle() {
   return (
@@ -89,16 +109,16 @@ function CityBuilderArticle() {
           <p className={cx(styles.signalLabel, 'mb-3')}>{section.kicker}</p>
           <h2>{section.label}</h2>
 
-          {section.body.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
+          {section.body.map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
           ))}
 
           {'quote' in section ? <blockquote>{section.quote}</blockquote> : null}
 
-          {'list' in section ? (
+          {section.list ? (
             <ul>
-              {section.list.map((item) => (
-                <li key={item}>{item}</li>
+              {section.list.map((item, i) => (
+                <li key={i}>{item}</li>
               ))}
             </ul>
           ) : null}
