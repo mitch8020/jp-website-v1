@@ -117,7 +117,7 @@ export const styles = {
   signalPathIndex:
     'inline-flex h-[2.1rem] w-[2.1rem] shrink-0 items-center justify-center rounded-full border-[1.5px] border-[color-mix(in_oklab,var(--signal-line)_28%,var(--signal-ink)_72%)] font-mono-alt text-[0.82rem] font-bold text-[var(--signal-ink)]',
   signalInlineNote:
-    'mt-2 rounded-[1.75rem] border border-[var(--signal-line)] bg-[color-mix(in_oklab,var(--signal-surface-strong)_88%,white_12%)] px-[1.4rem] py-[1.35rem]',
+    'mt-6 rounded-[1.75rem] border border-[var(--signal-line)] bg-[color-mix(in_oklab,var(--signal-surface-strong)_88%,white_12%)] px-[1.4rem] py-[1.35rem]',
   signalKeyCue:
     'rounded-[1.6rem] border-2 border-[color-mix(in_oklab,var(--signal-line)_26%,var(--signal-ink)_74%)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--signal-surface-strong)_96%,white_4%),color-mix(in_oklab,var(--signal-surface)_92%,white_8%))] px-[1.2rem] py-[1.25rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.52),0_16px_30px_rgba(17,32,46,0.08)] max-sm:px-4 max-sm:py-[1.05rem]',
   signalKeyCueLabel:
