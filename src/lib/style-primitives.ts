@@ -56,6 +56,8 @@ export const styles = {
     'border-[color-mix(in_oklab,var(--chip-line)_45%,var(--sea-ink)_55%)] bg-[color-mix(in_oklab,var(--surface-strong)_86%,white_14%)] text-[var(--sea-ink)] hover:bg-[var(--link-bg-hover)]',
   siteControlPillAccent:
     'border-[color-mix(in_oklab,var(--lagoon-deep)_58%,var(--sea-ink)_42%)] bg-[linear-gradient(135deg,color-mix(in_oklab,var(--lagoon)_72%,white_28%),color-mix(in_oklab,var(--lagoon-deep)_68%,white_32%))] text-[#14353a]',
+  siteControlPillOutline:
+    'border-[1.5px] border-[var(--sea-ink-soft)] bg-transparent text-[var(--sea-ink-soft)] shadow-none hover:bg-[var(--link-bg-hover)]',
   siteControlPillBrand: 'min-h-[2.85rem] px-[1.1rem] pl-[0.45rem]',
   headerControlPill: 'w-auto',
 

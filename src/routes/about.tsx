@@ -103,7 +103,13 @@ function AboutRoute() {
               >
                 Construction Background
               </span>
-              <span className="inline-flex items-center gap-1.5 font-semibold">
+              <span
+                className={cx(
+                  styles.siteControlPill,
+                  styles.siteControlPillOutline,
+                  'text-xs',
+                )}
+              >
                 <MapPin size={15} />
                 Nashville, TN
               </span>
@@ -260,6 +266,36 @@ function AboutRoute() {
               className="font-semibold text-[var(--lagoon-deep)] underline decoration-[color-mix(in_oklab,var(--lagoon-deep)_45%,transparent)] underline-offset-4"
             >
               Nashville Bike Fun
+            </a>
+            .
+          </p>
+          <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
+            I also have two cats,{' '}
+            <a
+              href="/about-assets/Bucket.jpg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[var(--lagoon-deep)] underline decoration-[color-mix(in_oklab,var(--lagoon-deep)_45%,transparent)] underline-offset-4"
+            >
+              Bucket
+            </a>{' '}
+            and{' '}
+            <a
+              href="/about-assets/Chico.jpg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[var(--lagoon-deep)] underline decoration-[color-mix(in_oklab,var(--lagoon-deep)_45%,transparent)] underline-offset-4"
+            >
+              Chico
+            </a>
+            . Here's a{' '}
+            <a
+              href="/about-assets/family-photo.jpg"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-[var(--lagoon-deep)] underline decoration-[color-mix(in_oklab,var(--lagoon-deep)_45%,transparent)] underline-offset-4"
+            >
+              Family Photo
             </a>
             .
           </p>
