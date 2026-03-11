@@ -107,7 +107,7 @@ export const styles = {
   orbitChip:
     'absolute inline-flex min-h-[2.35rem] items-center rounded-full border-[1.5px] border-[color-mix(in_oklab,var(--signal-line)_26%,var(--signal-ink)_74%)] bg-[color-mix(in_oklab,var(--signal-surface-strong)_92%,white_8%)] px-[0.86rem] py-[0.58rem] font-mono-alt text-[0.78rem] font-bold uppercase tracking-[0.12em] text-[var(--signal-ink)] shadow-[0_14px_26px_rgba(17,32,46,0.12)] max-sm:min-h-[2.1rem] max-sm:px-[0.7rem] max-sm:py-[0.46rem] max-sm:text-[0.7rem] max-sm:tracking-[0.1em]',
   orbitCore:
-    'absolute left-1/2 top-1/2 w-[min(74%,21rem)] -translate-x-1/2 -translate-y-1/2 rounded-[1.75rem] border border-[var(--signal-line)] bg-[color-mix(in_oklab,var(--signal-surface-strong)_92%,white_8%)] px-[1.4rem] py-[1.35rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_24px_44px_rgba(17,32,46,0.16)] max-sm:w-[min(78%,17rem)] max-sm:px-[1.05rem] max-sm:py-4',
+    'absolute left-1/2 top-1/2 w-[min(74%,21rem)] -translate-x-1/2 -translate-y-1/2 rounded-[1.75rem] border border-[var(--signal-line)] bg-[color-mix(in_oklab,var(--signal-surface-strong)_92%,white_8%)] px-[1.8rem] py-[1.8rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_24px_44px_rgba(17,32,46,0.16)] max-sm:w-[min(78%,17rem)] max-sm:px-[1.3rem] max-sm:py-[1.3rem]',
 
   signalPath: cx(
     'flex min-w-0 items-start gap-[0.9rem] rounded-2xl px-[0.8rem] py-3 no-underline',
@@ -117,7 +117,7 @@ export const styles = {
   signalPathIndex:
     'inline-flex h-[2.1rem] w-[2.1rem] shrink-0 items-center justify-center rounded-full border-[1.5px] border-[color-mix(in_oklab,var(--signal-line)_28%,var(--signal-ink)_72%)] font-mono-alt text-[0.82rem] font-bold text-[var(--signal-ink)]',
   signalInlineNote:
-    'rounded-[1.75rem] border border-[var(--signal-line)] bg-[color-mix(in_oklab,var(--signal-surface-strong)_88%,white_12%)] px-[1.4rem] py-[1.35rem]',
+    'mt-2 rounded-[1.75rem] border border-[var(--signal-line)] bg-[color-mix(in_oklab,var(--signal-surface-strong)_88%,white_12%)] px-[1.4rem] py-[1.35rem]',
   signalKeyCue:
     'rounded-[1.6rem] border-2 border-[color-mix(in_oklab,var(--signal-line)_26%,var(--signal-ink)_74%)] bg-[linear-gradient(155deg,color-mix(in_oklab,var(--signal-surface-strong)_96%,white_4%),color-mix(in_oklab,var(--signal-surface)_92%,white_8%))] px-[1.2rem] py-[1.25rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.52),0_16px_30px_rgba(17,32,46,0.08)] max-sm:px-4 max-sm:py-[1.05rem]',
   signalKeyCueLabel:

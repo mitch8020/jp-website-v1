@@ -138,7 +138,7 @@ export default function BlogArticleLayout({
           <div
             className={cx(
               styles.orbitField,
-              'hidden min-h-[260px] sm:block sm:min-h-[300px]',
+              'hidden min-h-[260px] sm:block sm:min-h-[360px] lg:min-h-[420px]',
             )}
           >
             <div
