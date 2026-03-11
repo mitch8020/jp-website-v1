@@ -1,7 +1,8 @@
 import BlogArticleLayout from '../BlogArticleLayout'
 import type { ComponentBlogPostDocument } from '../blog-types'
-import { cx, styles } from '../../../lib/style-primitives'
 import { futuresWorthPlayingForSummary } from '../manual-post-summaries'
+import { ManualArticleSection } from './ManualArticleSection'
+import { blogLink } from './blogLink'
 
 const articleSections = [
   {
@@ -44,7 +45,14 @@ const articleSections = [
     label: 'Events create conversation, and conversation creates care',
     kicker: 'Signal 04',
     body: [
-      `The future of culture is increasingly event-driven. Events give people a reason to talk; conversation gives people a reason to connect; and real connection makes people more likely to help each other in the physical world.`,
+      <>
+        The future of culture is increasingly event-driven. Formats like{' '}
+        {blogLink('byohp', 'BYOHP')} and{' '}
+        {blogLink('movie-events', 'Movie Events')} give people a reason to
+        talk; conversation gives people a reason to connect; and real
+        connection makes people more likely to help each other in the physical
+        world.
+      </>,
       `That matters because many people are exhausted by distant tragedies they cannot act on. We should push toward systems that help people solve the problems they can actually see from day to day. Hope feels believable when the feedback loop is local, visible, and shared.`,
       `If we can build worlds where people see the direct impact of their work on someone who truly needs it, happiness stops being abstract moral language. It becomes a practical outcome of better coordination.`,
     ],
@@ -54,7 +62,14 @@ const articleSections = [
     label: 'Play can teach faster than obligation',
     kicker: 'Signal 05',
     body: [
-      `Games are one of the most underrated engines for learning because they hide the lesson inside momentum. An event inside a game can feel like entertainment while quietly rewiring how someone solves problems, reads other people, or experiments with strategy.`,
+      <>
+        Games are one of the most underrated engines for learning because they
+        hide the lesson inside momentum. An event inside a game can feel like
+        entertainment while quietly rewiring how someone solves problems, reads
+        other people, or experiments with strategy. That is part of why{' '}
+        {blogLink('game-nights', 'Game Nights')} matters: it teaches
+        coordination while still feeling like fun.
+      </>,
       `That is why language learning through media can work so well. Studying Japanese head-on can feel intimidating. Watching something compelling is easy. First you follow the subtitles so you can feel the story. Then you watch again. Eventually you start repeating lines under your breath, noticing sounds before meanings, and meanings before grammar. Curiosity does the rest.`,
       `The same pattern shows up everywhere. Fans learn how to discuss a show without spoiling it. New players learn how to communicate with masters of a game. People grow into new literacies through repeated play, not through shame. Equity often starts with patience: everyone gets there on their own schedule.`,
     ],
@@ -66,7 +81,21 @@ const articleSections = [
     kicker: 'Signal 06',
     body: [
       `There is a long arc from war games to board games to video games, and it raises a serious question: what would it look like to design a game that helps end hunger, reduce injustice, or make cooperation irresistible? The point is not escapism. The point is to make better behavior attractive enough to rehearse.`,
-      `Iteration now happens at every layer. We can test ideas at almost no cost, shape plans at a manageable cost, and only then spend heavily on implementation. A rough rule of thumb is simple: it might cost one unit to iterate on an idea, ten to iterate on planning, and a hundred to change implementation after the fact. AI dramatically improves the first layer. That should make us bolder about exploring futures and stricter about deciding which ones deserve to be built.`,
+      <>
+        Iteration now happens at every layer. We can test ideas at almost no
+        cost, shape plans at a manageable cost, and only then spend heavily on
+        implementation. A rough rule of thumb is simple: it might cost one unit
+        to iterate on an idea, ten to iterate on planning, and a hundred to
+        change implementation after the fact. AI dramatically improves the
+        first layer. That should make us bolder about exploring futures and
+        stricter about deciding which ones deserve to be built. Projects like{' '}
+        {blogLink(
+          'city-builder-for-real-world',
+          'City Builder for the Real World',
+        )}{' '}
+        only become plausible when that cheaper iteration loop is available
+        early.
+      </>,
     ],
     quote:
       'Cheap iteration is not permission to ship noise. It is permission to discover better futures before they become expensive.',
@@ -77,33 +106,7 @@ function FuturesWorthPlayingForArticle() {
   return (
     <BlogArticleLayout post={futuresWorthPlayingForSummary}>
       {articleSections.map((section) => (
-        <section key={section.id} id={section.id} className="scroll-mt-28">
-          <p className={cx(styles.signalLabel, 'mb-3')}>{section.kicker}</p>
-          <h2>{section.label}</h2>
-
-          {section.body.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-
-          {'quote' in section ? <blockquote>{section.quote}</blockquote> : null}
-
-          {'list' in section ? (
-            <ul>
-              {section.list.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          ) : null}
-
-          {'note' in section ? (
-            <div className={styles.signalInlineNote}>
-              <p className={cx(styles.signalLabel, 'mb-2')}>Applied example</p>
-              <p className="m-0 text-base leading-8 text-[var(--signal-ink-soft)]">
-                {section.note}
-              </p>
-            </div>
-          ) : null}
-        </section>
+        <ManualArticleSection key={section.id} section={section} />
       ))}
     </BlogArticleLayout>
   )

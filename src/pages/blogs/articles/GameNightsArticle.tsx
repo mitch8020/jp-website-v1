@@ -1,7 +1,8 @@
 import BlogArticleLayout from '../BlogArticleLayout'
 import type { ComponentBlogPostDocument } from '../blog-types'
-import { cx, styles } from '../../../lib/style-primitives'
 import { gameNightsSummary } from '../manual-post-summaries'
+import { ManualArticleSection } from './ManualArticleSection'
+import { blogLink } from './blogLink'
 
 const articleSections = [
   {
@@ -20,6 +21,11 @@ const articleSections = [
     body: [
       `The format is deliberately low-infrastructure. Find a space with enough room and enough power outlets. Warehouses, community centers, church basements, someone's garage. The venue does not need to be fancy. It needs to be available and it needs to have electricity.`,
       `Everyone brings their own console. Switches, PlayStations, Xboxes, Steam Decks, laptops. The hardware does not matter. What matters is that people show up with something to play and a willingness to play it with other people. A few folding tables, some power strips, and a Wi-Fi connection handle the rest.`,
+      <>
+        In that sense, this sits right beside {blogLink('byohp', 'BYOHP')} and{' '}
+        {blogLink('movie-events', 'Movie Events')}: the same low-friction
+        community model, just pointed at play instead of music or film.
+      </>,
     ],
     list: [
       'A large space with power outlets.',
@@ -54,33 +60,7 @@ function GameNightsArticle() {
   return (
     <BlogArticleLayout post={gameNightsSummary}>
       {articleSections.map((section) => (
-        <section key={section.id} id={section.id} className="scroll-mt-28">
-          <p className={cx(styles.signalLabel, 'mb-3')}>{section.kicker}</p>
-          <h2>{section.label}</h2>
-
-          {section.body.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-
-          {'quote' in section ? <blockquote>{section.quote}</blockquote> : null}
-
-          {'list' in section ? (
-            <ul>
-              {section.list.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          ) : null}
-
-          {'note' in section ? (
-            <div className={styles.signalInlineNote}>
-              <p className={cx(styles.signalLabel, 'mb-2')}>Applied example</p>
-              <p className="m-0 text-base leading-8 text-[var(--signal-ink-soft)]">
-                {section.note}
-              </p>
-            </div>
-          ) : null}
-        </section>
+        <ManualArticleSection key={section.id} section={section} />
       ))}
     </BlogArticleLayout>
   )

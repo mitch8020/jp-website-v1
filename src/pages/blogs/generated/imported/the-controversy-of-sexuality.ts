@@ -51,12 +51,16 @@ export const theControversyOfSexualityDocument = {
     {
       "id": "the-only-problem-with-showing-your-sexuality-to-the-world-is-that-the",
       "label": "The only problem with showing your sexuality to the world is that the..."
+    },
+    {
+      "id": "keep-reading-appearance-v",
+      "label": "Keep reading: Appearance v."
     }
   ],
   "source": "wordpress",
   "commentCount": 0,
   "kind": "html",
-  "html": "<section id=\"the-only-problem-with-showing-your-sexuality-to-the-world-is-that-the\" class=\"scroll-mt-28\"><p>The only problem with showing your sexuality to the world is that the world doesn’t usually accept people who are open with their sexuality. Other than that, you do your thang, no if’s or but’s (well maybe butts if you’re into that). Main point: please don’t hate the person next to you just because you don’t know them or that they’re a little different. Okay? Thanks.</p></section>",
+  "html": "<section id=\"the-only-problem-with-showing-your-sexuality-to-the-world-is-that-the\" class=\"scroll-mt-28\"><p>The only problem with showing your sexuality to the world is that the world doesn’t usually accept people who are open with their sexuality. Other than that, you do your thang, no if’s or but’s (well maybe butts if you’re into that). Main point: please don’t hate the person next to you just because you don’t know them or that they’re a little different. Okay? Thanks.</p></section>\n<section id=\"keep-reading-appearance-v\" class=\"scroll-mt-28\"><p>Keep reading: <a href=\"/blog/appearance-v-reality\">Appearance v. Reality</a>, <a href=\"/blog/confederate-flaggay-pride-debate\">Confederate Flag/Gay Pride Debate</a></p></section>",
   "comments": []
 } satisfies HtmlBlogPostDocument
 

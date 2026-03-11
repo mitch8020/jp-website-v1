@@ -1,4 +1,5 @@
 import { JSDOM } from 'jsdom'
+import { createSectionLinkDeduper } from '../src/pages/blogs/section-link-dedupe.js'
 
 const decoderDom = new JSDOM('<!doctype html><html><body></body></html>')
 const decoderDocument = decoderDom.window.document
@@ -194,6 +195,105 @@ export function rewriteWordPressLinks(html, slugMap = {}) {
   }
 
   return document.body.innerHTML.trim()
+}
+
+function escapeHtml(value = '') {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+export function appendCuratedReadingLinks(blocks = [], html = '', links = []) {
+  const blockList = Array.isArray(blocks) ? [...blocks] : []
+  const trimmedHtml = typeof html === 'string' ? html.trim() : ''
+  const linkList = Array.isArray(links) ? links : []
+
+  if (!blockList.length || !trimmedHtml || trimmedHtml.includes('href="/blog/')) {
+    return blockList
+  }
+
+  const anchors = linkList
+    .map(({ href = '', label = '' }) => {
+      const safeHref = sanitizeUrl(href)
+      const safeLabel = normalizeWhitespace(label)
+
+      if (!safeHref.startsWith('/blog/') || !safeLabel) {
+        return null
+      }
+
+      return {
+        anchorHtml: `<a href="${safeHref}">${escapeHtml(safeLabel)}</a>`,
+        label: safeLabel,
+      }
+    })
+    .filter(Boolean)
+
+  if (!anchors.length) {
+    return blockList
+  }
+
+  return [
+    ...blockList,
+    {
+      html: `<p>Keep reading: ${anchors.map(({ anchorHtml }) => anchorHtml).join(', ')}</p>`,
+      text: `Keep reading: ${anchors.map(({ label }) => label).join(', ')}`,
+      forceOwnSection: true,
+    },
+  ]
+}
+
+function dedupeAnchorsWithinRoot(root) {
+  const tracker = createSectionLinkDeduper()
+
+  function walk(node) {
+    for (const child of [...node.childNodes]) {
+      if (child.nodeType !== child.ELEMENT_NODE) {
+        continue
+      }
+
+      const element = child
+
+      if (element.tagName.toLowerCase() === 'a') {
+        const href = element.getAttribute('href') ?? ''
+
+        if (href && !tracker.shouldKeepHref(href)) {
+          walk(element)
+          replaceWithChildren(element)
+          continue
+        }
+      }
+
+      walk(element)
+    }
+  }
+
+  walk(root)
+}
+
+export function dedupeSectionLinksInHtml(html = '') {
+  const trimmedHtml = html.trim()
+
+  if (!trimmedHtml) {
+    return trimmedHtml
+  }
+
+  const dom = new JSDOM(`<!doctype html><html><body>${trimmedHtml}</body></html>`)
+  const body = dom.window.document.body
+  const sections = [...body.querySelectorAll('section')]
+
+  if (!sections.length) {
+    dedupeAnchorsWithinRoot(body)
+    return body.innerHTML.trim()
+  }
+
+  for (const section of sections) {
+    dedupeAnchorsWithinRoot(section)
+  }
+
+  return body.innerHTML.trim()
 }
 
 function replaceWithChildren(element) {
@@ -503,6 +603,18 @@ export function chunkBlocksIntoSections(blocks) {
 
   for (let index = 0; index < blocks.length; index += 1) {
     const block = blocks[index]
+
+    if (block.forceOwnSection) {
+      if (currentChunk.length > 0) {
+        chunkedBlocks.push(currentChunk)
+        currentChunk = []
+        currentSize = 0
+      }
+
+      chunkedBlocks.push([block])
+      continue
+    }
+
     const remainingBlocks = blocks.length - index
     const remainingSections = desiredSections - chunkedBlocks.length
 

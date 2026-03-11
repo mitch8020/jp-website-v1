@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
+import { curatedArchiveBacklinks } from './wordpress-curated-backlinks.mjs'
 import {
+  appendCuratedReadingLinks,
   chunkBlocksIntoSections,
   decodeHtmlEntities,
+  dedupeSectionLinksInHtml,
   estimateReadTime,
   extractDateOnly,
   filterArchivedComments,
@@ -70,17 +73,79 @@ describe('wordpress-import-utils', () => {
     expect(blocks).toHaveLength(2)
   })
 
-  it('chunks sanitized blocks into anchorable sections', () => {
+  it('appends curated keep-reading blocks only for configured posts without internal links', () => {
+    const standaloneHtml = '<p>Standalone archive thought.</p>'
+    const standaloneBlocks = [
+      { html: standaloneHtml, text: 'Standalone archive thought.' },
+    ]
+    const withExistingInternalLink =
+      '<p>Read <a href="/blog/existing-post">this</a> first.</p>'
+    const existingBlocks = [
+      { html: withExistingInternalLink, text: 'Read this first.' },
+    ]
+
+    const appendedBlocks = appendCuratedReadingLinks(
+      standaloneBlocks,
+      standaloneHtml,
+      curatedArchiveBacklinks['dedication'],
+    )
+
+    expect(appendedBlocks).toHaveLength(2)
+    expect(appendedBlocks[1].html).toContain('href="/blog/16-lessons-for-2016"')
+    expect(appendedBlocks[1].forceOwnSection).toBe(true)
+
+    expect(
+      appendCuratedReadingLinks(
+        standaloneBlocks,
+        standaloneHtml,
+        curatedArchiveBacklinks['life-update-graduation-nashville-and-birthday'],
+      ),
+    ).toEqual(standaloneBlocks)
+
+    expect(
+      appendCuratedReadingLinks(
+        existingBlocks,
+        withExistingInternalLink,
+        curatedArchiveBacklinks['dedication'],
+      ),
+    ).toEqual(existingBlocks)
+  })
+
+  it('chunks sanitized blocks into anchorable sections and isolates forced sections', () => {
     const blocks = Array.from({ length: 8 }, (_, index) => ({
       html: `<p>Section ${index + 1} text. ${'A'.repeat(900)}</p>`,
       text: `Section ${index + 1} text. ${'A'.repeat(900)}`,
     }))
+    blocks.push({
+      html: '<p>Keep reading: <a href="/blog/dedication">Dedication</a></p>',
+      text: 'Keep reading: Dedication',
+      forceOwnSection: true,
+    })
 
     const { html, sectionLinks } = chunkBlocksIntoSections(blocks)
 
     expect(sectionLinks).toHaveLength(4)
     expect(html).toContain('<section id=')
     expect(new Set(sectionLinks.map((section) => section.id)).size).toBe(4)
+    expect(html).toContain('Keep reading: <a href="/blog/dedication">Dedication</a>')
+  })
+
+  it('dedupes repeated anchors within each generated section only', () => {
+    const dedupedHtml = dedupeSectionLinksInHtml(`
+      <section id="section-one">
+        <p><a href="/blog/byohp">BYOHP</a> meets <a href="/blog/byohp/">BYOHP again</a>.</p>
+        <p><a href="https://www.taliho.com">Taliho</a> builds things with <a href="https://www.taliho.com/">Taliho again</a>.</p>
+      </section>
+      <section id="section-two">
+        <p><a href="/blog/byohp">BYOHP in another section</a>.</p>
+      </section>
+    `)
+
+    expect((dedupedHtml.match(/href="\/blog\/byohp"/g) ?? []).length).toBe(2)
+    expect(dedupedHtml).not.toContain('<a href="/blog/byohp/">BYOHP again</a>')
+    expect(dedupedHtml).toContain('BYOHP again')
+    expect(dedupedHtml).toContain('href="https://www.taliho.com"')
+    expect(dedupedHtml).not.toContain('<a href="https://www.taliho.com/">Taliho again</a>')
   })
 
   it('filters pingbacks and nests archived reader comments', () => {

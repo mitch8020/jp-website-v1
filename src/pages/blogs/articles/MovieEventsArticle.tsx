@@ -1,7 +1,8 @@
 import BlogArticleLayout from '../BlogArticleLayout'
 import type { ComponentBlogPostDocument } from '../blog-types'
-import { cx, styles } from '../../../lib/style-primitives'
 import { movieEventsSummary } from '../manual-post-summaries'
+import { ManualArticleSection } from './ManualArticleSection'
+import { blogLink } from './blogLink'
 
 const articleSections = [
   {
@@ -29,7 +30,14 @@ const articleSections = [
     label: 'Tips and NFC cover the tab',
     kicker: 'Signal 03',
     body: [
-      `The same tip-based revenue model from BYOHP applies here. NFC cards and QR codes are set up at the entrance or passed around before the movie starts. Everyone contributes what they can toward the theater rental. No fixed ticket price. No one is priced out. The group absorbs the cost together.`,
+      <>
+        The same tip-based revenue model from{' '}
+        {blogLink('byohp', 'BYOHP')} applies here. NFC cards and QR codes are
+        set up at the entrance or passed around before the movie starts.
+        Everyone contributes what they can toward the theater rental. No fixed
+        ticket price. No one is priced out. The group absorbs the cost
+        together.
+      </>,
       `This works because the ask is small and the value is obvious. People just watched a movie they voted for, in a private room, surrounded by friends. Tapping a phone to chip in five or ten dollars feels natural, not transactional. And for the people who want to give more, the option is right there.`,
     ],
     list: [
@@ -55,33 +63,7 @@ function MovieEventsArticle() {
   return (
     <BlogArticleLayout post={movieEventsSummary}>
       {articleSections.map((section) => (
-        <section key={section.id} id={section.id} className="scroll-mt-28">
-          <p className={cx(styles.signalLabel, 'mb-3')}>{section.kicker}</p>
-          <h2>{section.label}</h2>
-
-          {section.body.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-
-          {'quote' in section ? <blockquote>{section.quote}</blockquote> : null}
-
-          {'list' in section ? (
-            <ul>
-              {section.list.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          ) : null}
-
-          {'note' in section ? (
-            <div className={styles.signalInlineNote}>
-              <p className={cx(styles.signalLabel, 'mb-2')}>Applied example</p>
-              <p className="m-0 text-base leading-8 text-[var(--signal-ink-soft)]">
-                {section.note}
-              </p>
-            </div>
-          ) : null}
-        </section>
+        <ManualArticleSection key={section.id} section={section} />
       ))}
     </BlogArticleLayout>
   )

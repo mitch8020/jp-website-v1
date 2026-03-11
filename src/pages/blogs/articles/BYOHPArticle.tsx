@@ -1,7 +1,8 @@
 import BlogArticleLayout from '../BlogArticleLayout'
 import type { ComponentBlogPostDocument } from '../blog-types'
-import { cx, styles } from '../../../lib/style-primitives'
 import { byohpSummary } from '../manual-post-summaries'
+import { ManualArticleSection } from './ManualArticleSection'
+import { blogLink } from './blogLink'
 
 const articleSections = [
   {
@@ -58,6 +59,12 @@ const articleSections = [
     body: [
       `The immediate goal is to run the experiment. See if the format works. See if tips actually flow. See if the community shows up consistently. But the long-term dream is much bigger: hire a DJ full-time, pay them a living salary of seventy thousand dollars or more, and have them play at events organized all over Nashville and beyond.`,
       `That sounds ambitious, but the math is not impossible if the events happen frequently enough and the community grows. Weekly sessions, multiple organizers, different DJs rotating through the format. The model does not depend on a single person. It depends on a system that anyone can replicate.`,
+      <>
+        The same community-first logic can branch into{' '}
+        {blogLink('movie-events', 'Movie Events')} or{' '}
+        {blogLink('game-nights', 'Game Nights')} without losing the core idea.
+        Music is just one doorway into the larger system.
+      </>,
       `The most important thing is that the DJ never overworks themselves. If weekly is too much, the cadence adjusts. The point is sustainability, not burnout. Creative ways to fund the artist, whether through sponsorship, direct payment, or community tips, all stay on the table. The format is the vehicle. The destination is a world where more artists can make a living doing what they love.`,
     ],
     quote: 'If the community shows up consistently, the artist deserves a living wage.',
@@ -68,33 +75,7 @@ function BYOHPArticle() {
   return (
     <BlogArticleLayout post={byohpSummary}>
       {articleSections.map((section) => (
-        <section key={section.id} id={section.id} className="scroll-mt-28">
-          <p className={cx(styles.signalLabel, 'mb-3')}>{section.kicker}</p>
-          <h2>{section.label}</h2>
-
-          {section.body.map((paragraph) => (
-            <p key={paragraph}>{paragraph}</p>
-          ))}
-
-          {'quote' in section ? <blockquote>{section.quote}</blockquote> : null}
-
-          {'list' in section ? (
-            <ul>
-              {section.list.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          ) : null}
-
-          {'note' in section ? (
-            <div className={styles.signalInlineNote}>
-              <p className={cx(styles.signalLabel, 'mb-2')}>Applied example</p>
-              <p className="m-0 text-base leading-8 text-[var(--signal-ink-soft)]">
-                {section.note}
-              </p>
-            </div>
-          ) : null}
-        </section>
+        <ManualArticleSection key={section.id} section={section} />
       ))}
     </BlogArticleLayout>
   )

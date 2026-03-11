@@ -4,8 +4,10 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { JSDOM } from 'jsdom'
 import {
+  appendCuratedReadingLinks,
   chunkBlocksIntoSections,
   decodeHtmlEntities,
+  dedupeSectionLinksInHtml,
   estimateReadTime,
   extractDateOnly,
   filterArchivedComments,
@@ -16,6 +18,7 @@ import {
   stripHtmlToText,
   trimText,
 } from './wordpress-import-utils.mjs'
+import { curatedArchiveBacklinks } from './wordpress-curated-backlinks.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(__dirname, '..')
@@ -215,9 +218,20 @@ function buildImportedDocument(entry, options) {
   ].filter((tag, index, allTags) => allTags.indexOf(tag) === index)
   const category = categories[0] ?? 'Archive'
   const sanitized = sanitizePostHtml(entry.content ?? '', { slugMap, assetMap })
-  const sectioned = chunkBlocksIntoSections(sanitized.blocks)
+  const blocksWithCuratedLinks = isPage
+    ? sanitized.blocks
+    : appendCuratedReadingLinks(
+        sanitized.blocks,
+        sanitized.html,
+        curatedArchiveBacklinks[slug] ?? [],
+      )
+  const sectioned = chunkBlocksIntoSections(blocksWithCuratedLinks)
+  const dedupedSectionHtml = dedupeSectionLinksInHtml(sectioned.html)
   const excerptText = stripHtmlToText(entry.excerpt || '')
-  const fallbackText = pickPrimaryParagraph(sanitized.blocks, sanitized.plainText)
+  const fallbackText = pickPrimaryParagraph(
+    sanitized.blocks,
+    sanitized.plainText,
+  )
   const summary = trimText(excerptText || fallbackText, 160)
   const teaser = trimText(excerptText || fallbackText, 220)
   const readTime = estimateReadTime(sanitized.plainText)
@@ -262,7 +276,7 @@ function buildImportedDocument(entry, options) {
     source: 'wordpress',
     commentCount,
     kind: 'html',
-    html: sectioned.html,
+    html: dedupedSectionHtml,
     comments,
     featuredImage: buildFeaturedImage(entry, assetMap, title),
   }
