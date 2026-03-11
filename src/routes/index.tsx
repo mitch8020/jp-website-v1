@@ -217,7 +217,7 @@ function App() {
         </div>
 
         <p className="mb-0 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          Through <strong className="text-[var(--sea-ink)]">years</strong> of
+          Through <strong className="text-[var(--sea-ink)]">many years</strong> of
           professional experience, I have developed my skills to focus on{' '}
           <strong className="text-[var(--sea-ink)]">
             efficient operations
